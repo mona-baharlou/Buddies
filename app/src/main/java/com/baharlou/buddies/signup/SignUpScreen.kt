@@ -102,25 +102,37 @@ private fun PasswordField(
         mutableStateOf(false)
     }
 
+    val visualTransformation = if (isVisible)
+        VisualTransformation.None
+    else
+        PasswordVisualTransformation()
+
     OutlinedTextField(
         value = value,
         label = {
             Text(text = stringResource(id = R.string.password))
         },
         trailingIcon = {
-            Image(
-                modifier = Modifier.clickable {
-                    isVisible = !isVisible
-                },
-                painter = painterResource(id = R.drawable.ic_visibility),
-                contentDescription = stringResource(R.string.toggle_visibility)
-            )
+            VisibilityToggle(isVisible) {
+                isVisible = !isVisible
+            }
         },
-        visualTransformation = if (isVisible)
-            VisualTransformation.None
-        else
-            PasswordVisualTransformation(),
+        visualTransformation = visualTransformation,
         onValueChange = OnValueChanged
+    )
+}
+
+@Composable
+private fun VisibilityToggle(
+    isVisible: Boolean,
+    OnToggle: () -> Unit
+) {
+    Image(
+        modifier = Modifier.clickable {
+            OnToggle.invoke()
+        },
+        painter = painterResource(id = R.drawable.ic_visibility),
+        contentDescription = stringResource(R.string.toggle_visibility)
     )
 }
 

@@ -2,6 +2,7 @@ package com.baharlou.buddies.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.baharlou.buddies.domain.user.User
 import com.baharlou.buddies.domain.validation.CredentialValidationResult
 import com.baharlou.buddies.domain.validation.RegexValidator
 import com.baharlou.buddies.signup.state.SignUpState
@@ -22,9 +23,10 @@ class SignUpViewModel(
             is CredentialValidationResult.InvalidPassword ->
                 _mutableSignUpState.value = SignUpState.BadPassword
 
-            is CredentialValidationResult.Valid ->
-                _mutableSignUpState.value = SignUpState.Valid
-
+            is CredentialValidationResult.Valid -> {
+                val user = User("id", "mona@gm.com")
+                _mutableSignUpState.value = SignUpState.SignedUp(user)
+            }
         }
 
     }

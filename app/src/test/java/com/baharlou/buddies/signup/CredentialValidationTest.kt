@@ -1,6 +1,7 @@
 package com.baharlou.buddies.signup
 
 import com.baharlou.buddies.InstantTaskExecutorExtension
+import com.baharlou.buddies.domain.validation.RegexValidator
 import com.baharlou.buddies.signup.state.SignUpState
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,7 +21,7 @@ class CredentialValidationTest {
         "'   '",
     )
     fun invalidEmail(email: String) {
-        val viewModel = SignUpViewModel()
+        val viewModel = SignUpViewModel(RegexValidator())
         viewModel.createAccount("mona", "password")
         assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
     }
@@ -37,7 +38,7 @@ class CredentialValidationTest {
         "'ABCDE1234@#'",
     )
     fun invalidPassword(password: String) {
-        val viewModel = SignUpViewModel()
+        val viewModel = SignUpViewModel(RegexValidator())
         viewModel.createAccount("mona@gmail.com", password)
         assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
     }

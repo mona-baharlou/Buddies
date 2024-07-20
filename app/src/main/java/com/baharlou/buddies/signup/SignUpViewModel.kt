@@ -2,17 +2,21 @@ package com.baharlou.buddies.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.baharlou.buddies.domain.validation.CredentialValidationResult
+import com.baharlou.buddies.domain.validation.RegexValidator
 import com.baharlou.buddies.signup.state.SignUpState
 import java.util.regex.Pattern
 
-class SignUpViewModel {
+class SignUpViewModel(
+    private val regexValidator: RegexValidator,
+) {
 
     private val _mutableSignUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _mutableSignUpState
 
     fun createAccount(email: String, password: String) {
 
-        val state = when (validate(email, password)) {
+        val state = when (regexValidator.validate(email, password)) {
             is CredentialValidationResult.InvalidEmail ->
                 SignUpState.BadEmail
 
@@ -42,11 +46,6 @@ class SignUpViewModel {
 
         } else TODO()
         return result
-    }
-
-    sealed class CredentialValidationResult {
-        object InvalidEmail : CredentialValidationResult()
-        object InvalidPassword : CredentialValidationResult()
     }
 
 }

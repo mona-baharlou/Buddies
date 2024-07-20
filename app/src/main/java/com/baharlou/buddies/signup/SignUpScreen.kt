@@ -127,11 +127,13 @@ private fun VisibilityToggle(
     isVisible: Boolean,
     OnToggle: () -> Unit
 ) {
+    val resource = if (isVisible) R.drawable.ic_invisible
+    else R.drawable.ic_visible
     Image(
         modifier = Modifier.clickable {
             OnToggle.invoke()
         },
-        painter = painterResource(id = R.drawable.ic_visibility),
+        painter = painterResource(id = resource),
         contentDescription = stringResource(R.string.toggle_visibility)
     )
 }

@@ -25,12 +25,16 @@ class SignUpViewModel(
 
             is CredentialValidationResult.Valid -> {
 
-                if (email.contains("sara")) {
-                    val user = User("saraId", email)
-                    _mutableSignUpState.value = SignUpState.SignedUp(user)
+                if (email.contains("neda")) {
+                    _mutableSignUpState.value = SignUpState.DuplicateAccount
                 } else {
-                    val user = User("id", email)
-                    _mutableSignUpState.value = SignUpState.SignedUp(user)
+                    if (email.contains("sara")) {
+                        val user = User("saraId", email)
+                        _mutableSignUpState.value = SignUpState.SignedUp(user)
+                    } else {
+                        val user = User("id", email)
+                        _mutableSignUpState.value = SignUpState.SignedUp(user)
+                    }
                 }
             }
         }

@@ -16,10 +16,13 @@ class SignUpViewModel {
             "[a-zA-Z0-9+._\\%-+]{1,256}\\@[a-zA-Z0-9][a-zA-Z0-9-]{0,64}(.[a-zA-Z0-9][a-zA-Z0-9-]{0,25})+"
         val emailPattern = Pattern.compile(emailRegex)
 
+
+        val passwordRegex = """^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*+=\-]).{8,}$"""
+        val passwordPattern = Pattern.compile(passwordRegex)
+
         if (!emailPattern.matcher(email).matches()) {
             _mutableSignUpState.value = SignUpState.BadEmail
-        }
-        else if(password.isEmpty()){
+        } else if (!passwordPattern.matcher(password).matches()) {
             _mutableSignUpState.value = SignUpState.BadPassword
 
         }

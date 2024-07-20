@@ -1,4 +1,5 @@
-#3 Buddies App 
+# Buddies App 
 
--Implementing JetPack Compose
--Ui / Unit Tests
+-Implementing JetPack Compose 
+
+-UI / Unit Tests

@@ -50,6 +50,7 @@ android {
   testOptions.unitTests.apply {
     tasks.withType<Test>().all(KotlinClosure1<Test, Test>({
       apply {
+        useJUnitPlatform()
         testLogging.exceptionFormat = TestExceptionFormat.FULL
         testLogging.events = setOf(
           TestLogEvent.PASSED,
@@ -81,7 +82,11 @@ dependencies {
   implementation(libs.androidx.ui.graphics)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.material3)
-  testImplementation(libs.junit)
+
+  testImplementation(libs.junit.jupiter.api)
+  testImplementation(libs.jupiter.junit.jupiter.params)
+  testRuntimeOnly(libs.junit.jupiter.engine)
+ // testImplementation(libs.junit)
 
   /*
     androidTestImplementation(libs.androidx.junit)

@@ -4,7 +4,7 @@ import com.baharlou.buddies.InstantTaskExecutorExtension
 import com.baharlou.buddies.domain.user.User
 import com.baharlou.buddies.domain.validation.RegexValidator
 import com.baharlou.buddies.signup.state.SignUpState
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -16,8 +16,19 @@ class CreateAccountTest {
         val viewModel = SignUpViewModel(RegexValidator())
         viewModel.createAccount("mona@gm.com", "Mona12@#")
 
-        val name = User("id", "mona@gm.com")
+        val user = User("id", "mona@gm.com")
 
-        Assertions.assertEquals(SignUpState.SignedUp(name), viewModel.signUpState.value)
+        assertEquals(SignUpState.SignedUp(user), viewModel.signUpState.value)
+    }
+
+    @Test
+    fun anotherAccountCreated() {
+        val viewModel = SignUpViewModel(RegexValidator())
+
+        viewModel.createAccount("sara@gm.com", "Sara@#$2")
+
+        val user = User("saraId", "sara@gm.com")
+
+        assertEquals(SignUpState.SignedUp(user), viewModel.signUpState.value)
     }
 }

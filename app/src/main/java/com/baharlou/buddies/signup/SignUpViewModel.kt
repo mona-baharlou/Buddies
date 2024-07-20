@@ -3,6 +3,7 @@ package com.baharlou.buddies.signup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.baharlou.buddies.signup.state.SignUpState
+import java.util.regex.Pattern
 
 class SignUpViewModel {
 
@@ -11,7 +12,17 @@ class SignUpViewModel {
 
     fun createAccount(email: String, password: String) {
 
-        _mutableSignUpState.value = SignUpState.BadEmail
+        val emailRegex =
+            "[a-zA-Z0-9+._\\%-+]{1,256}\\@[a-zA-Z0-9][a-zA-Z0-9-]{0,64}(.[a-zA-Z0-9][a-zA-Z0-9-]{0,25})+"
+        val emailPattern = Pattern.compile(emailRegex)
+
+        if (!emailPattern.matcher(email).matches()) {
+            _mutableSignUpState.value = SignUpState.BadEmail
+        }
+        else if(password.isEmpty()){
+            _mutableSignUpState.value = SignUpState.BadPassword
+
+        }
     }
 
 }

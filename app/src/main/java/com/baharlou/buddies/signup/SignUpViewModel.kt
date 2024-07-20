@@ -26,10 +26,10 @@ class SignUpViewModel(
             is CredentialValidationResult.Valid -> {
 
                 if (email.contains("sara")) {
-                    val user = User("saraId", "sara@gm.com")
+                    val user = User("saraId", email)
                     _mutableSignUpState.value = SignUpState.SignedUp(user)
                 } else {
-                    val user = User("id", "mona@gm.com")
+                    val user = User("id", email)
                     _mutableSignUpState.value = SignUpState.SignedUp(user)
                 }
             }

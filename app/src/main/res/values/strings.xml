@@ -6,4 +6,5 @@
     <string name="timeline">Timeline</string>
     <string name="create_an_account">Create an account</string>
     <string name="toggle_visibility">Toggle visibility</string>
+    <string name="duplicateAccountError">An account with this email already exists</string>
 </resources>

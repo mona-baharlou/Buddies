@@ -11,14 +11,14 @@ import com.baharlou.buddies.R
 
 fun launchSignUpScreen(
     rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
-    block: SignUpRobot.() -> Unit
+    block: SignUpRobot.() -> Unit,
 ): SignUpRobot {
     return SignUpRobot(rule).apply(block)
 }
 
 
 class SignUpRobot(
-    val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
+    val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
 ) {
 
     fun typeEmail(email: String) {
@@ -40,7 +40,7 @@ class SignUpRobot(
     }
 
     infix fun verify(
-        block: SignUpVerification.() -> Unit
+        block: SignUpVerification.() -> Unit,
     ): SignUpVerification {
         return SignUpVerification(rule).apply(block)
     }
@@ -49,12 +49,19 @@ class SignUpRobot(
 }
 
 class SignUpVerification(
-    private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
+    private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
 ) {
     fun timeLineScreenIsPresented() {
         val timeline = rule.activity.getString(R.string.timeline)
 
         rule.onNodeWithText(timeline).assertIsDisplayed()
+    }
+
+
+    fun accountAlreadyExistErrorIsShown() {
+        val duplicateAccountError = rule.activity.getString(R.string.duplicateAccountError)
+        rule.onNodeWithText(duplicateAccountError)
+            .assertIsDisplayed()
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,12 +38,13 @@ fun SignUpScreenPreview() {
     /*SignUpScreen(){
 
     }
-*/}
+*/
+}
 
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel : SignUpViewModel,
+    signUpViewModel: SignUpViewModel,
     onSignedUp: () -> Unit,
 ) {
 
@@ -54,6 +56,26 @@ fun SignUpScreen(
         onSignedUp()
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        SignUpForm(email, password, signUpViewModel)
+        MessageSection(R.string.duplicateAccountError)
+
+    }
+}
+
+@Composable
+fun MessageSection(duplicateAccountError: Int) {
+    TODO("Not yet implemented")
+}
+
+@Composable
+private fun SignUpForm(
+    email: String,
+    password: String,
+    signUpViewModel: SignUpViewModel,
+) {
+    var email1 = email
+    var password1 = password
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,15 +90,15 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         EmailField(
-            value = email,
-            OnValueChanged = { email = it }
+            value = email1,
+            OnValueChanged = { email1 = it }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         PasswordField(
-            value = password,
-            OnValueChanged = { password = it }
+            value = password1,
+            OnValueChanged = { password1 = it }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -84,7 +106,7 @@ fun SignUpScreen(
         Button(
             modifier = Modifier.fillMaxWidth(.8f),
             onClick = {
-                signUpViewModel.createAccount(email, password)
+                signUpViewModel.createAccount(email1, password1)
             }) {
             Text(text = stringResource(id = R.string.signup))
         }

@@ -16,6 +16,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,16 +29,36 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.baharlou.buddies.R
+import com.baharlou.buddies.domain.user.OffLineUser
+import com.baharlou.buddies.domain.user.UserRepository
+import com.baharlou.buddies.domain.validation.RegexValidator
+import com.baharlou.buddies.signup.state.SignUpState
 
 @Composable
 @Preview(showBackground = true)
 fun SignUpScreenPreview() {
-    SignUpScreen()
+    SignUpScreen(){
+
+    }
 }
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    onSignedUp: () -> Unit,
+) {
+
+    val userRepository = UserRepository(OffLineUser())
+    val regexValidator = RegexValidator()
+    val signUpViewModel = SignUpViewModel(regexValidator, userRepository)
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val signUpState by signUpViewModel.signUpState.observeAsState()
+
+    if (signUpState is SignUpState.SignedUp) {
+        onSignedUp()
+    }
 
     Column(
         modifier = Modifier
@@ -52,7 +73,6 @@ fun SignUpScreen() {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        var email by remember { mutableStateOf("") }
         EmailField(
             value = email,
             OnValueChanged = { email = it }
@@ -60,7 +80,6 @@ fun SignUpScreen() {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        var password by remember { mutableStateOf("") }
         PasswordField(
             value = password,
             OnValueChanged = { password = it }
@@ -70,7 +89,9 @@ fun SignUpScreen() {
 
         Button(
             modifier = Modifier.fillMaxWidth(.8f),
-            onClick = { }) {
+            onClick = {
+                signUpViewModel.createAccount(email, password)
+            }) {
             Text(text = stringResource(id = R.string.signup))
         }
 
@@ -96,7 +117,7 @@ private fun EmailField(
 @Composable
 private fun PasswordField(
     value: String,
-    OnValueChanged: (String) -> Unit
+    OnValueChanged: (String) -> Unit,
 ) {
     var isVisible by remember {
         mutableStateOf(false)
@@ -125,7 +146,7 @@ private fun PasswordField(
 @Composable
 private fun VisibilityToggle(
     isVisible: Boolean,
-    OnToggle: () -> Unit
+    OnToggle: () -> Unit,
 ) {
     val resource = if (isVisible) R.drawable.ic_invisible
     else R.drawable.ic_visible

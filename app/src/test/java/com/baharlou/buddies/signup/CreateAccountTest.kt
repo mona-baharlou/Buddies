@@ -41,9 +41,11 @@ class CreateAccountTest {
 
         val user = User("nedaId", "neda@gm.com")
         val password = "nEda@#$1"
-        val viewModel = SignUpViewModel(RegexValidator(), UserRepository(OffLineUser())).also {
-            it.createAccount(user.username, password)
-        }
+
+        val userAndPassword = mutableMapOf(password to mutableListOf(user))
+        val repository = UserRepository(OffLineUser(userAndPassword))
+
+        val viewModel = SignUpViewModel(RegexValidator(), repository)
 
         viewModel.createAccount(user.username, password)
 

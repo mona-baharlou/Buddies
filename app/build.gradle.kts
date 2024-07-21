@@ -88,19 +88,17 @@ dependencies {
   implementation(libs.androidx.material3)
   implementation(libs.cronet.embedded)
 
+  //JUnit5 --> Unit Test
   testImplementation(libs.junit.jupiter.api)
   testImplementation(libs.jupiter.junit.jupiter.params)
   testRuntimeOnly(libs.junit.jupiter.engine)
- // testImplementation(libs.junit)
-
-  /*
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)*/
-
-  //androidTestImplementation(libs.ui.test.junit4)
 
   androidTestImplementation(platform(libs.androidx.compose.bom))
   androidTestImplementation(libs.androidx.ui.test.junit4)
   debugImplementation(libs.androidx.ui.tooling)
   debugImplementation(libs.androidx.ui.test.manifest)
+
+  //Koin --> Dependency Injection
+  implementation(libs.koin.core)
+  implementation(libs.koin.android)
 }

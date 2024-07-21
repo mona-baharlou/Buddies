@@ -17,15 +17,6 @@ open class OffLineUser(
         return user
     }
 
-    private fun saveUser(password: String, user: User) {
-        usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
-    }
-
-    private fun createIdForAccounts(email: String): String {
-        val userId = email.takeWhile { it != '@' } + "Id"
-        return userId
-    }
-
     private fun checkAccountExists(email: String) {
         if (usersAndPasswords.values
                 .flatten()
@@ -34,4 +25,17 @@ open class OffLineUser(
             throw DuplicateAccountException()
         }
     }
+
+    private fun createIdForAccounts(email: String): String {
+        val userId = email.takeWhile { it != '@' } + "Id"
+        return userId
+    }
+
+
+    private fun saveUser(password: String, user: User) {
+        usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
+    }
+
+
+
 }

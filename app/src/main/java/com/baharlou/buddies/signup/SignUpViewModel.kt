@@ -2,6 +2,8 @@ package com.baharlou.buddies.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.baharlou.buddies.domain.exceptions.DuplicateAccountException
+import com.baharlou.buddies.domain.user.OffLineUser
 import com.baharlou.buddies.domain.user.User
 import com.baharlou.buddies.domain.validation.CredentialValidationResult
 import com.baharlou.buddies.domain.validation.RegexValidator
@@ -44,50 +46,15 @@ class SignUpViewModel(
             val result = try {
                 val user = offLineUser.createUser(email, password)
                 SignUpState.SignedUp(user)
-            } catch (duplicateAccount: DuplicateAccountExeption) {
+            } catch (duplicateAccount: DuplicateAccountException) {
                 SignUpState.DuplicateAccount
             }
             return result
         }
     }
 
-    class OffLineUser(
-        private val usersAndPasswords: MutableMap<String, MutableList<User>> = mutableMapOf(),
-    ) {
-        fun createUser(
-            email: String,
-            password: String,
-        ): User {
 
-            checkAccountExists(email)
-            val userId = createIdForAccounts(email)
-            val user = User(userId, email)
-            saveUser(password, user)
-            return user
-        }
-
-        private fun saveUser(password: String, user: User) {
-            usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
-        }
-
-        private fun createIdForAccounts(email: String): String {
-            val userId = email.takeWhile { it != '@' } + "Id"
-            return userId
-        }
-
-        private fun checkAccountExists(email: String) {
-            if (usersAndPasswords.values
-                    .flatten()
-                    .any { it.username == email } //if Already have a user with the given email
-            ) {
-                throw DuplicateAccountExeption()
-            }
-        }
-
-
-    }
-
-    class DuplicateAccountExeption : Throwable()
 }
+
 
 

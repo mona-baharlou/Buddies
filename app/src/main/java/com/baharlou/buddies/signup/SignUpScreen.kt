@@ -29,28 +29,22 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.baharlou.buddies.R
-import com.baharlou.buddies.domain.user.OffLineUser
-import com.baharlou.buddies.domain.user.UserRepository
-import com.baharlou.buddies.domain.validation.RegexValidator
 import com.baharlou.buddies.signup.state.SignUpState
 
 @Composable
 @Preview(showBackground = true)
 fun SignUpScreenPreview() {
-    SignUpScreen(){
+    /*SignUpScreen(){
 
     }
-}
+*/}
 
 
 @Composable
 fun SignUpScreen(
+    signUpViewModel : SignUpViewModel,
     onSignedUp: () -> Unit,
 ) {
-
-    val userRepository = UserRepository(OffLineUser())
-    val regexValidator = RegexValidator()
-    val signUpViewModel = SignUpViewModel(regexValidator, userRepository)
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

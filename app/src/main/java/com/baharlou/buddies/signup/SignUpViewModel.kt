@@ -14,6 +14,8 @@ class SignUpViewModel(
     private val _mutableSignUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _mutableSignUpState
 
+    val usersAndPasswords = mutableMapOf<String, MutableList<User>>()
+
     fun createAccount(email: String, password: String) {
 
         when (regexValidator.validate(email, password)) {
@@ -28,11 +30,17 @@ class SignUpViewModel(
                 if (email.contains("neda")) {
                     _mutableSignUpState.value = SignUpState.DuplicateAccount
                 } else {
-                    if (email.contains("sara")) {
+                    val exists = usersAndPasswords.values
+                        .flatten()
+                        .any { it.username == email } //if Already have a user with the given email
+
+                    if (exists/*email.contains("sara")*/) {
                         val user = User("saraId", email)
                         _mutableSignUpState.value = SignUpState.SignedUp(user)
                     } else {
-                        val user = User("id", email)
+                        val userId = email.takeWhile { it != '@' } + "Id"
+                        val user = User(userId, email)
+                        usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
                         _mutableSignUpState.value = SignUpState.SignedUp(user)
                     }
                 }

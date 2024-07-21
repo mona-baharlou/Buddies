@@ -16,7 +16,7 @@ class CreateAccountTest {
         val viewModel = SignUpViewModel(RegexValidator())
         viewModel.createAccount("mona@gm.com", "Mona12@#")
 
-        val user = User("id", "mona@gm.com")
+        val user = User("monaId", "mona@gm.com")
 
         assertEquals(SignUpState.SignedUp(user), viewModel.signUpState.value)
     }

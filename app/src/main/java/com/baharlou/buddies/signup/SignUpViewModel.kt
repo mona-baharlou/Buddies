@@ -38,15 +38,23 @@ class SignUpViewModel(
                         val user = User("saraId", email)
                         _mutableSignUpState.value = SignUpState.SignedUp(user)
                     } else {
-                        val userId = email.takeWhile { it != '@' } + "Id"
-                        val user = User(userId, email)
-                        usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
+                        val user = createUser(email, password)
                         _mutableSignUpState.value = SignUpState.SignedUp(user)
                     }
                 }
             }
         }
 
+    }
+
+    private fun createUser(
+        email: String,
+        password: String,
+    ): User {
+        val userId = email.takeWhile { it != '@' } + "Id"
+        val user = User(userId, email)
+        usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
+        return user
     }
 
 }

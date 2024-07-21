@@ -1,6 +1,8 @@
 package com.baharlou.buddies.signup
 
 import com.baharlou.buddies.InstantTaskExecutorExtension
+import com.baharlou.buddies.domain.user.OffLineUser
+import com.baharlou.buddies.domain.user.UserRepository
 import com.baharlou.buddies.domain.validation.CredentialValidationResult
 import com.baharlou.buddies.domain.validation.RegexValidator
 import com.baharlou.buddies.signup.state.SignUpState
@@ -23,7 +25,7 @@ class CredentialValidationTest {
         "'   '",
     )
     fun invalidEmail(email: String) {
-        val viewModel = SignUpViewModel(RegexValidator())
+        val viewModel = SignUpViewModel(RegexValidator(), UserRepository(OffLineUser()))
         viewModel.createAccount("mona", "password")
         assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
     }
@@ -41,7 +43,7 @@ class CredentialValidationTest {
     )
 
     fun invalidPassword(password: String) {
-        val viewModel = SignUpViewModel(RegexValidator())
+        val viewModel = SignUpViewModel(RegexValidator(), UserRepository(OffLineUser()))
         viewModel.createAccount("mona@gmail.com", password)
         assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
     }

@@ -3,7 +3,7 @@ package com.baharlou.buddies.domain.user
 import com.baharlou.buddies.domain.exceptions.DuplicateAccountException
 import com.baharlou.buddies.signup.state.SignUpState
 
-open class UserRepository(val offLineUser: OffLineUser) {
+class UserRepository(private val offLineUser: OffLineUser) {
     fun signUp(
         email: String,
         password: String,

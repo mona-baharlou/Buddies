@@ -2,7 +2,6 @@ package com.baharlou.buddies.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.baharlou.buddies.domain.user.OffLineUser
 import com.baharlou.buddies.domain.user.UserRepository
 import com.baharlou.buddies.domain.validation.CredentialValidationResult
 import com.baharlou.buddies.domain.validation.RegexValidator
@@ -10,12 +9,10 @@ import com.baharlou.buddies.signup.state.SignUpState
 
 class SignUpViewModel(
     private val regexValidator: RegexValidator,
+    private val userRepository: UserRepository,
 ) {
-
     private val _mutableSignUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _mutableSignUpState
-
-    //val usersAndPasswords = mutableMapOf<String, MutableList<User>>()
 
     fun createAccount(email: String, password: String) {
 
@@ -33,7 +30,6 @@ class SignUpViewModel(
 
     }
 
-    private val userRepository = UserRepository(OffLineUser())
 
 
 

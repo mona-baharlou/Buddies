@@ -27,21 +27,18 @@ class SignUpViewModel(
 
             is CredentialValidationResult.Valid -> {
 
-                if (email.contains("neda")) {
+              /*  val exists = usersAndPasswords.values
+                    .flatten()
+                    .any { it.username == email } //if Already have a user with the given email
+*/
+                try{
+                    //val user = User("saraId", email)
+                    val user = createUser(email, password)
+                    _mutableSignUpState.value = SignUpState.SignedUp(user)
+                } catch (duplicateAccount:DuplicateAccountExeption) {
                     _mutableSignUpState.value = SignUpState.DuplicateAccount
-                } else {
-                    val exists = usersAndPasswords.values
-                        .flatten()
-                        .any { it.username == email } //if Already have a user with the given email
-
-                    if (exists/*email.contains("sara")*/) {
-                        val user = User("saraId", email)
-                        _mutableSignUpState.value = SignUpState.SignedUp(user)
-                    } else {
-                        val user = createUser(email, password)
-                        _mutableSignUpState.value = SignUpState.SignedUp(user)
-                    }
                 }
+
             }
         }
 
@@ -52,10 +49,10 @@ class SignUpViewModel(
         password: String,
     ): User {
 
-        if(usersAndPasswords.values
+        if (usersAndPasswords.values
                 .flatten()
                 .any { it.username == email } //if Already have a user with the given email
-        ){
+        ) {
             throw DuplicateAccountExeption()
         }
         val userId = email.takeWhile { it != '@' } + "Id"

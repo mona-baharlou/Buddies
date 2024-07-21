@@ -26,57 +26,68 @@ class SignUpViewModel(
                 _mutableSignUpState.value = SignUpState.BadPassword
 
             is CredentialValidationResult.Valid ->
-                _mutableSignUpState.value = signUp(email, password)
+                _mutableSignUpState.value = userRepository.signUp(email, password)
 
         }
 
     }
 
-    private fun signUp(
-        email: String,
-        password: String,
-    ): SignUpState {
-        val result = try {
-            val user = createUser(email, password)
-            SignUpState.SignedUp(user)
-        } catch (duplicateAccount: DuplicateAccountExeption) {
-            SignUpState.DuplicateAccount
+    private val userRepository = UserRepository(OffLineUser())
+
+    class UserRepository(
+        private val offLineUser: OffLineUser,
+    ) {
+        fun signUp(
+            email: String,
+            password: String,
+        ): SignUpState {
+            val result = try {
+                val user = offLineUser.createUser(email, password)
+                SignUpState.SignedUp(user)
+            } catch (duplicateAccount: DuplicateAccountExeption) {
+                SignUpState.DuplicateAccount
+            }
+            return result
         }
-        return result
     }
 
-    private fun createUser(
-        email: String,
-        password: String,
-    ): User {
+    class OffLineUser(
+        private val usersAndPasswords: MutableMap<String, MutableList<User>> = mutableMapOf(),
+    ) {
+        fun createUser(
+            email: String,
+            password: String,
+        ): User {
 
-        checkAccountExists(email)
-        val userId = createIdForAccounts(email)
-        val user = User(userId, email)
-        saveUser(password, user)
-        return user
-    }
-
-    private fun saveUser(password: String, user: User) {
-        usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
-    }
-
-    private fun createIdForAccounts(email: String): String {
-        val userId = email.takeWhile { it != '@' } + "Id"
-        return userId
-    }
-
-    private fun checkAccountExists(email: String) {
-        if (usersAndPasswords.values
-                .flatten()
-                .any { it.username == email } //if Already have a user with the given email
-        ) {
-            throw DuplicateAccountExeption()
+            checkAccountExists(email)
+            val userId = createIdForAccounts(email)
+            val user = User(userId, email)
+            saveUser(password, user)
+            return user
         }
+
+        private fun saveUser(password: String, user: User) {
+            usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
+        }
+
+        private fun createIdForAccounts(email: String): String {
+            val userId = email.takeWhile { it != '@' } + "Id"
+            return userId
+        }
+
+        private fun checkAccountExists(email: String) {
+            if (usersAndPasswords.values
+                    .flatten()
+                    .any { it.username == email } //if Already have a user with the given email
+            ) {
+                throw DuplicateAccountExeption()
+            }
+        }
+
+
     }
 
     class DuplicateAccountExeption : Throwable()
-
 }
 
 

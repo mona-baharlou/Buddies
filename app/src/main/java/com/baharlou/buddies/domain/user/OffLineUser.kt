@@ -4,8 +4,9 @@ import com.baharlou.buddies.domain.exceptions.DuplicateAccountException
 
 open class OffLineUser(
     private val usersAndPasswords: MutableMap<String, MutableList<User>> = mutableMapOf(),
-) {
-    fun createUser(
+) : UserCatalog {
+
+    override fun createUser(
         email: String,
         password: String,
     ): User {
@@ -35,7 +36,6 @@ open class OffLineUser(
     private fun saveUser(password: String, user: User) {
         usersAndPasswords.getOrPut(password, ::mutableListOf).add(user)
     }
-
 
 
 }

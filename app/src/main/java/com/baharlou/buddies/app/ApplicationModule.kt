@@ -11,7 +11,7 @@ val applicationModule = module {
 
     single { OffLineUser() }
     factory { RegexValidator() }
-    factory { UserRepository(offLineUser = get()) }
+    factory { UserRepository(userCatalog = get()) }
 
     viewModel {
         SignUpViewModel(

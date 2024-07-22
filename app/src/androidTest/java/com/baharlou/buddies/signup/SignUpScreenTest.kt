@@ -2,7 +2,9 @@ package com.baharlou.buddies.signup
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.baharlou.buddies.MainActivity
+import com.baharlou.buddies.domain.exceptions.BackendException
 import com.baharlou.buddies.domain.user.OffLineUser
+import com.baharlou.buddies.domain.user.User
 import com.baharlou.buddies.domain.user.UserCatalog
 import org.junit.After
 import org.junit.Before
@@ -30,7 +32,7 @@ class SignUpScreenTest {
     @Test
     fun performSignUp() {
         launchSignUpScreen(signupTestRule) {
-            typeEmail("mona@gmail.com")
+            typeEmail("monaa@gmail.com")
             typePassword("paSsword1@")
             submit()
         } verify {
@@ -56,6 +58,31 @@ class SignUpScreenTest {
         }
     }
 
+    @Test
+    fun displayBackendError() {
+
+        val replaceModule = module {
+            factory<UserCatalog> { UnavailableUserCatalog() }
+        }
+
+        loadKoinModules(replaceModule)
+
+        launchSignUpScreen(signupTestRule) {
+            typeEmail("hima@gm.com")
+            typePassword("hIm@1234")
+            submit()
+        } verify {
+            backendErrorIsShown()
+        }
+    }
+
+
+    //mimic a behavior that the backend throw an exception
+    class UnavailableUserCatalog : UserCatalog {
+        override fun createUser(email: String, password: String): User {
+            throw BackendException()
+        }
+    }
 
     @After
     fun tearDown() {

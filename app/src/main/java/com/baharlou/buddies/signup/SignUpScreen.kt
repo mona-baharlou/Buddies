@@ -61,7 +61,11 @@ fun SignUpScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         SignUpForm(email, password, signUpViewModel)
-        MessageSection(R.string.duplicateAccountError)
+
+        if (signUpState is SignUpState.DuplicateAccount) {
+            MessageSection(R.string.duplicateAccountError)
+        }
+
     }
 }
 
@@ -93,7 +97,6 @@ private fun SignUpForm(
     ) {
 
         ScreenTitle(R.string.create_an_account)
-
 
         Spacer(modifier = Modifier.height(10.dp))
 

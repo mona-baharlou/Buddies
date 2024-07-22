@@ -54,13 +54,20 @@ class SignUpVerification(
     fun timeLineScreenIsPresented() {
         val timeline = rule.activity.getString(R.string.timeline)
 
-        rule.onNodeWithText(timeline).assertIsDisplayed()
+        rule.onNodeWithText(timeline)
+            .assertIsDisplayed()
     }
 
 
     fun accountAlreadyExistErrorIsShown() {
         val duplicateAccountError = rule.activity.getString(R.string.duplicateAccountError)
         rule.onNodeWithText(duplicateAccountError)
+            .assertIsDisplayed()
+    }
+
+    fun backendErrorIsShown() {
+        val backendError = rule.activity.getString(R.string.backendError)
+        rule.onNodeWithText(backendError)
             .assertIsDisplayed()
     }
 

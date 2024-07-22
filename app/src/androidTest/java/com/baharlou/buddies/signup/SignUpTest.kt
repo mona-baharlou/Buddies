@@ -40,8 +40,8 @@ class SignUpTest {
 
     @Test
     fun displayAccountAlreadyExistedError() {
-        val signedUpUserEmail = "nima@gm.com"
-        val signedUpUserPassword = "nIma@123"
+        val signedUpUserEmail = "nimaa@gm.com"
+        val signedUpUserPassword = "nImaa@123"
 
         offLineUser.createUser(signedUpUserEmail, signedUpUserPassword)
 

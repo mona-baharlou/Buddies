@@ -2,6 +2,7 @@ package com.baharlou.buddies.signup
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,13 +62,18 @@ fun SignUpScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         SignUpForm(email, password, signUpViewModel)
         MessageSection(R.string.duplicateAccountError)
-
     }
 }
 
 @Composable
-fun MessageSection(duplicateAccountError: Int) {
-    TODO("Not yet implemented")
+fun MessageSection(@StringRes res: Int) {
+    Surface(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.error)
+            .fillMaxWidth()
+    ) {
+        Text(text = stringResource(id = res))
+    }
 }
 
 @Composable

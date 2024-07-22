@@ -10,7 +10,7 @@ import org.junit.Test
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
-class SignUpTest {
+class SignUpScreenTest {
 
     @get:Rule
     val signupTestRule = createAndroidComposeRule<MainActivity>()

@@ -38,10 +38,6 @@ import com.baharlou.buddies.signup.state.SignUpState
 @Composable
 @Preview(showBackground = true)
 fun SignUpScreenPreview() {
-    /*SignUpScreen(){
-
-    }
-*/
 }
 
 
@@ -51,8 +47,7 @@ fun SignUpScreen(
     onSignedUp: () -> Unit,
 ) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
     if (signUpState is SignUpState.SignedUp) {
@@ -60,7 +55,7 @@ fun SignUpScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        SignUpForm(email, password, signUpViewModel)
+        SignUpForm(signUpViewModel)
 
         if (signUpState is SignUpState.DuplicateAccount) {
             MessageSection(R.string.duplicateAccountError)
@@ -70,24 +65,12 @@ fun SignUpScreen(
 }
 
 @Composable
-fun MessageSection(@StringRes res: Int) {
-    Surface(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.error)
-            .fillMaxWidth()
-    ) {
-        Text(text = stringResource(id = res))
-    }
-}
-
-@Composable
 private fun SignUpForm(
-    email: String,
-    password: String,
     signUpViewModel: SignUpViewModel,
 ) {
-    var email1 = email
-    var password1 = password
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,15 +84,15 @@ private fun SignUpForm(
         Spacer(modifier = Modifier.height(10.dp))
 
         EmailField(
-            value = email1,
-            OnValueChanged = { email1 = it }
+            value = email,
+            OnValueChanged = { email = it }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         PasswordField(
-            value = password1,
-            OnValueChanged = { password1 = it }
+            value = password,
+            OnValueChanged = { password = it }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -117,11 +100,23 @@ private fun SignUpForm(
         Button(
             modifier = Modifier.fillMaxWidth(.8f),
             onClick = {
-                signUpViewModel.createAccount(email1, password1)
+                signUpViewModel.createAccount(email, password)
             }) {
             Text(text = stringResource(id = R.string.signup))
         }
 
+    }
+}
+
+@Composable
+fun MessageSection(@StringRes res: Int) {
+    Surface(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.error)
+            .fillMaxWidth()
+            .padding(20.dp),
+    ) {
+        Text(text = stringResource(id = res))
     }
 }
 

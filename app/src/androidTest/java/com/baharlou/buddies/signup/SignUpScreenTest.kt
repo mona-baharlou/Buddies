@@ -3,6 +3,7 @@ package com.baharlou.buddies.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.baharlou.buddies.MainActivity
 import com.baharlou.buddies.domain.user.OffLineUser
+import com.baharlou.buddies.domain.user.UserCatalog
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -18,7 +19,7 @@ class SignUpScreenTest {
     private val offLineUser = OffLineUser()
 
     private val signUpModule = module {
-        factory { offLineUser } //replacement for offlineUser that is created in application Module
+        factory<UserCatalog> { offLineUser } //replacement for offlineUser that is created in application Module
     }
 
     @Before

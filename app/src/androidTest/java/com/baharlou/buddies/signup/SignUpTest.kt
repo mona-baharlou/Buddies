@@ -3,6 +3,7 @@ package com.baharlou.buddies.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.baharlou.buddies.MainActivity
 import com.baharlou.buddies.domain.user.OffLineUser
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,5 +55,14 @@ class SignUpTest {
         }
     }
 
+
+    @After
+    fun tearDown() {
+        val resetModule = module {
+            single { OffLineUser() }
+        }
+
+        loadKoinModules(resetModule)
+    }
 
 }

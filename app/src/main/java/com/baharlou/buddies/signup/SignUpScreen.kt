@@ -53,12 +53,17 @@ fun SignUpScreen(
     if (signUpState is SignUpState.SignedUp) {
         onSignedUp()
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
         SignUpForm(signUpViewModel)
 
         if (signUpState is SignUpState.DuplicateAccount) {
             MessageSection(R.string.duplicateAccountError)
+        }
+        else if(signUpState is SignUpState.BackendError){
+            MessageSection(res = R.string.backendError)
+        }
+        else if(signUpState is SignUpState.OfflineError){
+            MessageSection(res = R.string.offlineError)
         }
 
     }

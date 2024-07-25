@@ -71,6 +71,17 @@ class SignUpScreenTest {
     }
 
     @Test
+    fun displayBadPasswordError(){
+        launchSignUpScreen(signupTestRule){
+            typeEmail("mona@gm.com")
+            typePassword("123")
+            submit()
+        } verify {
+            badPasswordErrorIsShown()
+        }
+    }
+
+    @Test
     fun displayBackendError() {
         val replaceModule = module {
             factory<UserCatalog> { UnavailableUserCatalog() }

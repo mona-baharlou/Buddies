@@ -47,7 +47,8 @@ fun SignUpScreen(
     onSignedUp: () -> Unit,
 ) {
 
-    var isValidEmail by remember { mutableStateOf(false) }
+    var isBadEmail by remember { mutableStateOf(false) }
+    var isBadPassword by remember { mutableStateOf(false) }
 
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
@@ -57,10 +58,14 @@ fun SignUpScreen(
     Box(modifier = Modifier.fillMaxSize()) {
 
         if (signUpState is SignUpState.BadEmail) {
-            isValidEmail = true
+            isBadEmail = true
         }
 
-        SignUpForm(signUpViewModel, isValidEmail)
+        if (signUpState is SignUpState.BadPassword) {
+            isBadPassword = true
+        }
+
+        SignUpForm(signUpViewModel, isBadEmail, isBadPassword)
 
         if (signUpState is SignUpState.DuplicateAccount) {
             MessageSection(R.string.duplicateAccountError)
@@ -76,7 +81,8 @@ fun SignUpScreen(
 @Composable
 private fun SignUpForm(
     signUpViewModel: SignUpViewModel,
-    isValidEmail: Boolean,
+    isBadEmail: Boolean,
+    isBadPassword: Boolean,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -95,7 +101,7 @@ private fun SignUpForm(
 
         EmailField(
             value = email,
-            isError = isValidEmail,
+            isError = isBadEmail,
             OnValueChanged = { email = it }
         )
 
@@ -103,6 +109,7 @@ private fun SignUpForm(
 
         PasswordField(
             value = password,
+            isError = isBadPassword,
             OnValueChanged = { password = it }
         )
 
@@ -154,6 +161,7 @@ private fun EmailField(
 @Composable
 private fun PasswordField(
     value: String,
+    isError: Boolean,
     OnValueChanged: (String) -> Unit,
 ) {
     var isVisible by remember {
@@ -167,8 +175,10 @@ private fun PasswordField(
 
     OutlinedTextField(
         value = value,
+        isError = isError,
         label = {
-            Text(text = stringResource(id = R.string.password))
+            val resource = if (isError) R.string.badPasswrordError else R.string.password
+            Text(text = stringResource(id = resource))
         },
         trailingIcon = {
             VisibilityToggle(isVisible) {

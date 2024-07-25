@@ -10,4 +10,5 @@
     <string name="backendError">An Error is occurred in the backend</string>
     <string name="offlineError">You seem to be offline</string>
     <string name="badEmailError">Email is not valid</string>
+    <string name="badPasswrordError">Password is not valid</string>
 </resources>

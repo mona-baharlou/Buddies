@@ -84,6 +84,12 @@ class SignUpVerification(
             .assertIsDisplayed()
     }
 
+    fun badPasswordErrorIsShown() {
+        val badPasswordError = rule.activity.getString(R.string.badPasswrordError)
+        rule.onNodeWithText(badPasswordError)
+            .assertIsDisplayed()
+    }
+
 }
 
 

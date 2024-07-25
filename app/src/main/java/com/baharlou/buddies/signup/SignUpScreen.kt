@@ -47,6 +47,7 @@ fun SignUpScreen(
     onSignedUp: () -> Unit,
 ) {
 
+    var isValidEmail by remember { mutableStateOf(false) }
 
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
@@ -54,15 +55,18 @@ fun SignUpScreen(
         onSignedUp()
     }
     Box(modifier = Modifier.fillMaxSize()) {
-        SignUpForm(signUpViewModel)
+
+        if (signUpState is SignUpState.BadEmail) {
+            isValidEmail = true
+        }
+
+        SignUpForm(signUpViewModel, isValidEmail)
 
         if (signUpState is SignUpState.DuplicateAccount) {
             MessageSection(R.string.duplicateAccountError)
-        }
-        else if(signUpState is SignUpState.BackendError){
+        } else if (signUpState is SignUpState.BackendError) {
             MessageSection(res = R.string.backendError)
-        }
-        else if(signUpState is SignUpState.OfflineError){
+        } else if (signUpState is SignUpState.OfflineError) {
             MessageSection(res = R.string.offlineError)
         }
 
@@ -72,6 +76,7 @@ fun SignUpScreen(
 @Composable
 private fun SignUpForm(
     signUpViewModel: SignUpViewModel,
+    isValidEmail: Boolean,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -90,6 +95,7 @@ private fun SignUpForm(
 
         EmailField(
             value = email,
+            isError = isValidEmail,
             OnValueChanged = { email = it }
         )
 
@@ -129,13 +135,17 @@ fun MessageSection(@StringRes res: Int) {
 @Composable
 private fun EmailField(
     value: String,
+    isError: Boolean,
     OnValueChanged: (String) -> Unit,
 ) {
 
     OutlinedTextField(
         value = value,
+        isError = isError,
         label = {
-            Text(text = stringResource(id = R.string.email))
+
+            val resource = if (isError) R.string.badEmailError else R.string.email
+            Text(text = stringResource(id = resource))
         },
         onValueChange = OnValueChanged
     )

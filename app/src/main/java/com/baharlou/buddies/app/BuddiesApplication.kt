@@ -8,6 +8,7 @@ class BuddiesApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin{
+            //allowOverride(true)
             modules(applicationModule)
         }
     }

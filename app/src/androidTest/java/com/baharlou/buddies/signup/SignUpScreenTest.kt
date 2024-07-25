@@ -61,17 +61,27 @@ class SignUpScreenTest {
     }
 
     @Test
-    fun displayBackendError() {
+    fun displayBadEmailError(){
+        launchSignUpScreen(signupTestRule){
+            typeEmail("emial")
+            submit()
+        } verify{
+            badEmailErrorIsShown()
+        }
+    }
 
+    @Test
+    fun displayBackendError() {
         val replaceModule = module {
             factory<UserCatalog> { UnavailableUserCatalog() }
         }
 
+        //unloadKoinModules(signUpModule)
         loadKoinModules(replaceModule)
 
         launchSignUpScreen(signupTestRule) {
-            typeEmail("hima1@gm.com")
-            typePassword("hIm@1234")
+            typeEmail("mona@gm.com")
+            typePassword("moNa123#")
             submit()
         } verify {
             backendErrorIsShown()
@@ -82,8 +92,10 @@ class SignUpScreenTest {
     @Test
     fun displayOfflineError() {
 
+        unloadKoinModules(signUpModule)
+
         val replaceModule = module {
-            factory<UserCatalog> { OfflineUserCatalog() }
+            single<UserCatalog> { OfflineUserCatalog() }
         }
 
         loadKoinModules(replaceModule)
@@ -99,11 +111,9 @@ class SignUpScreenTest {
 
     @After
     fun tearDown() {
-
         val resetModule = module {
             single { OffLineUser() }
         }
-
         loadKoinModules(resetModule)
     }
 

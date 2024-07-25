@@ -25,6 +25,7 @@ class SignUpViewModel(
                 _mutableSignUpState.value = SignUpState.BadPassword
 
             is CredentialValidationResult.Valid ->
+              //  _mutableSignUpState.value = SignUpState.BackendError
                 _mutableSignUpState.value = userRepository.signUp(email, password)
 
         }

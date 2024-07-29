@@ -10,7 +10,6 @@ open class OffLineUser(
         email: String,
         password: String,
     ): User {
-
         checkAccountExists(email)
         val userId = createIdForAccounts(email)
         val user = User(userId, email)

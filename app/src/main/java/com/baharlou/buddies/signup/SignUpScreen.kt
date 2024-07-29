@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -47,14 +48,17 @@ fun SignUpScreen(
     onSignedUp: () -> Unit,
 ) {
 
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     var isBadEmail by remember { mutableStateOf(false) }
     var isBadPassword by remember { mutableStateOf(false) }
-
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
     if (signUpState is SignUpState.SignedUp) {
         onSignedUp()
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         if (signUpState is SignUpState.BadEmail) {
@@ -65,7 +69,7 @@ fun SignUpScreen(
             isBadPassword = true
         }
 
-        SignUpForm(signUpViewModel, isBadEmail, isBadPassword)
+        SignUpForm(email, password, signUpViewModel, isBadEmail, isBadPassword, OnEmailChanged, OnPasswordChanged)
 
         if (signUpState is SignUpState.DuplicateAccount) {
             MessageSection(R.string.duplicateAccountError)
@@ -80,13 +84,15 @@ fun SignUpScreen(
 
 @Composable
 private fun SignUpForm(
+    email: State<String>,
+    password: State<String>,
     signUpViewModel: SignUpViewModel,
     isBadEmail: Boolean,
     isBadPassword: Boolean,
 ) {
-    var email by remember { mutableStateOf("") }
+   /* var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
+*/
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -100,7 +106,7 @@ private fun SignUpForm(
         Spacer(modifier = Modifier.height(10.dp))
 
         EmailField(
-            value = email,
+            value = email.value,
             isError = isBadEmail,
             OnValueChanged = { email = it }
         )
@@ -108,7 +114,7 @@ private fun SignUpForm(
         Spacer(modifier = Modifier.height(10.dp))
 
         PasswordField(
-            value = password,
+            value = password.value,
             isError = isBadPassword,
             OnValueChanged = { password = it }
         )
